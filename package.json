@@ -21,8 +21,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx",
     "lint:fix": "eslint . --ext .js,.jsx --fix",
-    "format": "prettier --write .",
-    "prepare": "husky install"
+    "format": "prettier --write ."
   },
   "lint-staged": {
     "*.{js,jsx}": [

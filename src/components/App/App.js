@@ -22,6 +22,10 @@ function App() {
     setTasks(updatedTasks);
   };
 
+  const clearCompleted = () => {
+    setTasks(tasks.filter((task) => !task.done));
+  };
+
   const onAdd = (newTask) => {
     const taskWithId = {
       id: Date.now(),
@@ -62,7 +66,12 @@ function App() {
           onEditSubmit={onEditSubmit}
           editingId={editingId}
         />
-        <Footer count={tasks.filter((task) => !task.done).length} filter={filter} onFilterChange={changeFilter} />
+        <Footer
+          count={tasks.filter((task) => !task.done).length}
+          filter={filter}
+          onFilterChange={changeFilter}
+          onClearCompleted={clearCompleted}
+        />
       </section>
     </section>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Footer.css';
 
-function Footer({ count, filter, onFilterChange }) {
+function Footer({ count, filter, onFilterChange, onClearCompleted }) {
   return (
     <footer className="footer">
       <span className="todo-count">{count} items left</span>
@@ -27,7 +27,7 @@ function Footer({ count, filter, onFilterChange }) {
           </button>
         </li>
       </ul>
-      <button type="button" className="clear-completed">
+      <button type="button" onClick={onClearCompleted}>
         Clear completed
       </button>
     </footer>

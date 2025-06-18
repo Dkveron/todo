@@ -4,16 +4,16 @@ import './New-task-form.css';
 
 function NewTaskForm({ onAdd }) {
   const [text, setText] = useState('');
+  const [minutes, setMinutes] = useState('');
+  const [seconds, setSeconds] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (text.trim()) {
-      onAdd({
-        label: text,
-        done: false,
-        created: new Date(),
-      });
+      onAdd(text, parseInt(minutes) || 0, parseInt(seconds) || 0);
       setText('');
+      setMinutes('');
+      setSeconds('');
     }
   };
 
@@ -21,18 +21,36 @@ function NewTaskForm({ onAdd }) {
     <header className="header">
       <h1>todos</h1>
       <form className="new-todo-form" onSubmit={handleSubmit}>
-        <label htmlFor="new-task-input" className="visually-hidden">
-          New Task
-        </label>
         <input
           id="new-task-input"
           name="newTask"
           className="new-todo"
-          placeholder="What needs to be done?"
+          placeholder="Task"
           value={text}
           onChange={(e) => setText(e.target.value)}
           autoFocus
         />
+        <input
+          className="new-todo-form__timer"
+          placeholder="Min"
+          type="number"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={minutes}
+          onChange={(e) => setMinutes(e.target.value)}
+          style={{ appearance: 'textfield' }}
+        />
+        <input
+          className="new-todo-form__timer"
+          placeholder="Sec"
+          type="number"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={seconds}
+          onChange={(e) => setSeconds(e.target.value)}
+          style={{ appearance: 'textfield' }}
+        />
+        <button type="submit" style={{ display: 'none' }} />
       </form>
     </header>
   );

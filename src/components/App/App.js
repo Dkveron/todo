@@ -26,12 +26,17 @@ function App() {
     setTasks(tasks.filter((task) => !task.done));
   };
 
-  const onAdd = (newTask) => {
-    const taskWithId = {
+  const onAdd = (label, minutes = 0, seconds = 0) => {
+    const totalSeconds = parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
+    const newTask = {
       id: Date.now(),
-      ...newTask,
+      label,
+      done: false,
+      created: Date.now(),
+      timeSpent: totalSeconds,
+      isTimerRunning: false,
     };
-    setTasks([...tasks, taskWithId]);
+    setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
   const changeFilter = (newFilter) => {
@@ -47,6 +52,29 @@ function App() {
     setTasks(updatedTasks);
     setEditingId(null);
   };
+
+  const startTimer = (id) => {
+    setTasks((prevTasks) => prevTasks.map((task) => (task.id === id ? { ...task, isTimerRunning: true } : task)));
+  };
+
+  const stopTimer = (id) => {
+    setTasks((prevTasks) => prevTasks.map((task) => (task.id === id ? { ...task, isTimerRunning: false } : task)));
+  };
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => {
+          if (task.isTimerRunning && task.timeSpent > 0) {
+            return { ...task, timeSpent: task.timeSpent - 1 };
+          }
+          return task;
+        })
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [setTasks]);
 
   const filteredTasks = tasks.filter((task) => {
     if (filter === 'active') return !task.done;
@@ -65,6 +93,8 @@ function App() {
           onEdit={onEdit}
           onEditSubmit={onEditSubmit}
           editingId={editingId}
+          onStartTimer={startTimer}
+          onStopTimer={stopTimer}
         />
         <Footer
           count={tasks.filter((task) => !task.done).length}
